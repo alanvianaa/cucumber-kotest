@@ -1,0 +1,79 @@
+buildscript {
+    ext.kotlin_version = '1.4.10'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.71'
+    id "com.commercehub.cucumber-jvm" version "0.11"
+}
+
+apply plugin: 'maven'
+apply plugin: 'kotlin'
+
+group 'com.alanviana'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.apache.commons:commons-lang3:3.11"
+
+    testImplementation "io.kotest:kotest-runner-junit5-jvm:4.2.0.RC2"
+    testImplementation 'io.cucumber:cucumber-java8:6.7.0'
+
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+wrapper {
+    gradleVersion = "5.1.1"
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+// TODO(Arrumar isso aqui)
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'gradle.cucumber', 'src/test/resources']
+        }
+    }
+}
