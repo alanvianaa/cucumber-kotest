@@ -1,5 +1,8 @@
+package hellocucumber
+
 import io.cucumber.java8.En
 import io.kotest.matchers.shouldBe
+import soma
 
 class StepDefs : En {
     init {
