@@ -6,9 +6,9 @@ import soma
 
 class StepDefs : En {
     init {
-        var valor1: Int = 0
-        var valor2: Int = 0
-        var result: Int = 0
+        var valor1 = 0
+        var valor2= 0
+        var result= 0
 
         Given("I have {int}") { valor: Int ->
             valor1 = valor
