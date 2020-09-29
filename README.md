@@ -1,5 +1,6 @@
 # cucumber and kotest
-Cucumber test in kotlin
+
+This repository is an example of how the cucumber framework works with kotest in kotlin
 
 ### documentation
 -> [Cucumber kotlin](https://cucumber.io/docs/guides/10-minute-tutorial/)
